@@ -80,6 +80,22 @@ public class MenuController : MonoBehaviour
     void SelectOption()
     {
         Debug.Log("Selected option: " + currMenu[currOption].name);
+
+        int optId = currMenu[currOption].id;
+        switch (optId)
+        {
+            case 0:
+                convController.NextNode();
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+                break;
+        }
     }
 
     void UpdateMenu() {
