@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class MenuController : MonoBehaviour
 {
@@ -9,6 +11,10 @@ public class MenuController : MonoBehaviour
     [SerializeField]
     public GameObject[] optionText;
 
+    public ConversationController convController;
+
+    Option[] currMenu;
+
     int currOption;
 
     // Start is called before the first frame update
@@ -16,27 +22,52 @@ public class MenuController : MonoBehaviour
     {
         currOption = 0;
         ticks[currOption].SetActive(true);
+
+        currMenu = new Option[] { new Option(0, "Option 1"), new Option(1, "Option 2"),
+                                  new Option(2, "Option 3"), new Option(3, "Option 4")};
+
+        UpdateMenu();
+
+
     }
 
     // Update is called once per frame
     void Update() {
+        float xAxis, yAxis;
 
-        if (Input.GetKeyDown("down") && currOption % 2 == 0)
+        if (Input.GetButtonDown("Vertical"))
         {
-            MoveOption(1);
+            yAxis = Input.GetAxis("Vertical");
+
+            if (yAxis < 0 && currOption % 2 == 0)
+            {
+                MoveOption(1);
+            }
+            if (yAxis > 0 && currOption % 2 == 1)
+            {
+                MoveOption(-1);
+            }
         }
-        if (Input.GetKeyDown("up") && currOption % 2 == 1)
+
+        if (Input.GetButtonDown("Horizontal"))
         {
-            MoveOption(-1);
+            xAxis = Input.GetAxis("Horizontal");
+            if (xAxis < 0 && currOption > 1)
+            {
+                MoveOption(-2);
+            }
+            if (xAxis > 0 && currOption < 2)
+            {
+                MoveOption(2);
+            }
         }
-        if (Input.GetKeyDown("left") && currOption > 1)
+
+
+        if (Input.GetButtonDown("Submit"))
         {
-            MoveOption(-2);
+            SelectOption();
         }
-        if (Input.GetKeyDown("right") && currOption < 2)
-        {
-            MoveOption(2);
-        }
+        
     }
 
     void MoveOption(int i)
@@ -45,4 +76,18 @@ public class MenuController : MonoBehaviour
         currOption += i;
         ticks[currOption].SetActive(true);
     }
+
+    void SelectOption()
+    {
+        Debug.Log("Selected option: " + currMenu[currOption].name);
+    }
+
+    void UpdateMenu() {
+        for(int i = 0; i <= 3; i++)
+        {
+            TextMeshProUGUI tmp = optionText[i].GetComponent<TextMeshProUGUI>();
+            tmp.SetText(currMenu[i].name); 
+        }
+    }
+
 }
