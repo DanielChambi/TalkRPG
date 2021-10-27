@@ -6,35 +6,39 @@ using TMPro;
 
 public class MenuController : MonoBehaviour
 {
+    //Marks for selected option
     [SerializeField]
     public GameObject[] ticks;
+    //Option text object
     [SerializeField]
     public GameObject[] optionText;
 
+    //General controller for conversation scenario
     public ConversationController convController;
 
+    //Options currently on display
     Option[] currMenu;
-
     int currOption;
 
-    // Start is called before the first frame update
+    
     void Start()
     {
+        //Start up tick
         currOption = 0;
         ticks[currOption].SetActive(true);
 
+        //Placeholder menu
         currMenu = new Option[] { new Option(0, "Option 1"), new Option(1, "Option 2"),
                                   new Option(2, "Option 3"), new Option(3, "Option 4")};
-
-        UpdateMenu();
-
-
+     
+        UpdateMenuText();
     }
 
-    // Update is called once per frame
+    
     void Update() {
-        float xAxis, yAxis;
 
+        //Get vertical input
+        float xAxis, yAxis;
         if (Input.GetButtonDown("Vertical"))
         {
             yAxis = Input.GetAxis("Vertical");
@@ -49,6 +53,7 @@ public class MenuController : MonoBehaviour
             }
         }
 
+        //Get horizontal input
         if (Input.GetButtonDown("Horizontal"))
         {
             xAxis = Input.GetAxis("Horizontal");
@@ -62,7 +67,7 @@ public class MenuController : MonoBehaviour
             }
         }
 
-
+        //Get selection input
         if (Input.GetButtonDown("Submit"))
         {
             SelectOption();
@@ -70,6 +75,7 @@ public class MenuController : MonoBehaviour
         
     }
 
+    //Shift selected option by ammount
     void MoveOption(int i)
     {
         ticks[currOption].SetActive(false);
@@ -77,6 +83,7 @@ public class MenuController : MonoBehaviour
         ticks[currOption].SetActive(true);
     }
 
+    //Do thing on selected option
     void SelectOption()
     {
         Debug.Log("Selected option: " + currMenu[currOption].name);
@@ -85,20 +92,30 @@ public class MenuController : MonoBehaviour
         switch (optId)
         {
             case 0:
-                convController.NextNode();
+                convController.UpdateMeter(0, 100);
+                convController.UpdateMeter(1, 100);
                 break;
             case 1:
+                convController.UpdateMeter(0, 10);               
                 break;
-            case 2:
+            case 2:                
+                convController.UpdateMeter(1, 10);
                 break;
             case 3:
+                convController.UpdateMeter(0, -100);
+                convController.UpdateMeter(1, -100);
                 break;
             default:
                 break;
         }
+
+        //Next dialoge
+        convController.AdvanceConversation();
     }
 
-    void UpdateMenu() {
+    //Set corresponding option text
+    void UpdateMenuText()
+    {
         for(int i = 0; i <= 3; i++)
         {
             TextMeshProUGUI tmp = optionText[i].GetComponent<TextMeshProUGUI>();
@@ -106,4 +123,5 @@ public class MenuController : MonoBehaviour
         }
     }
 
+    
 }

@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Option
 {
+    //Unique identifiable id
     public int id { get; }
+    //Option name in menu
     public string name { get; }
 
     public Option(int id, string name)
